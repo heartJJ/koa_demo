@@ -24,6 +24,11 @@ app.use(async (ctx, next) => {
   }
 });
 
+// app.on('error', err => {
+//   debug('error事件触发，打印错误如下：');
+//   debug(arr);
+// });
+
 // 打印URL
 // app.use(async (ctx, next) => {
 //   console.log(`${ctx.request.method} ${ctx.request.url}`); // 打印URL
@@ -35,11 +40,6 @@ app.use(logger());
 // 解析body
 app.use(bodyparser());
 
-app.use( (ctx, next) => {
- // console.log(ctx.request);
-  console.log(ctx.request.body);
-  next();
-});
 // add router middleware:
 app.use(router.routes());
 // 路由
