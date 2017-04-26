@@ -1,20 +1,15 @@
 const {diskStore, memoryStore} = require('../common/form_data_parse.js'),
   fs = require('fs');
 
-const upload = diskStore('./public/uploads');
+const upload = diskStore('./uploads');
 
 /**
  * 获取上传页面
  * @param {*} ctx 
  * @param {*} next 
  */
-const getFilePage = (ctx, next) => {
-  ctx.response.body = `<form action="/upload" method="post" enctype="multipart/form-data">
-    <h2>单图上传</h2>
-    <input type="text" name="logo">
-    <input type="file" name="logo">
-    <input type="submit" value="提交">
-  </form>`;
+const getFilePage = async (ctx, next) => {
+  await ctx.render('fileUpload/upload', {title: 'File Uplaod Page'});
 };
 
 /**
@@ -23,8 +18,8 @@ const getFilePage = (ctx, next) => {
  * @param {*} next 
  */
 const uploadFile = (ctx, next) => {
-  console.log(ctx.req.file);
-  console.log(ctx.req.body);
+  // console.log(ctx.req.file);
+  // console.log(ctx.req.body);
   ctx.response.body = `<h2>操作成功</h2>`;
 }
 

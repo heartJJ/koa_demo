@@ -4,7 +4,8 @@
  * @param {*} next 
  */
 const getMainPage = async (ctx, next) => {
-  ctx.response.body = '<h1>Hello, koa2!</h1>';
+  // ctx.response.body = '<h1>Hello, koa2!</h1>';
+  await ctx.render('main', {title: 'koa-demo', content: 'Hello Koa!'})
 };
 
 /**

@@ -3,8 +3,12 @@ const Koa = require('koa'),
   router = require('koa-router')(), // koa-router 返回的是一个函数
   bodyparser = require('koa-bodyparser'),// 加载 Body 解析模块
   logger = require('koa-logger'),
-  debug = require('debug')('debug'); 
-  app_router = require('./router');// 加载路由 
+  debug = require('debug')('debug'),
+  app_router = require('./router'),// 加载路由
+  nunjucksViews = require('koa-nunjucks-promise'),  // 引擎模板
+  static = require('koa-static'), // 静态文件
+  mount = require('koa-mount'), // 挂载静态文件的中间件
+  mysql_session = require('./common/mysql_session'); // session处理
 // 创建一个Koa对象表示web app本身:
 const app = new Koa();
 
@@ -23,6 +27,27 @@ app.use(async (ctx, next) => {
     }
   }
 });
+
+// 视图配置
+app.use(nunjucksViews(`${__dirname}/views`), {
+  ext: 'html',
+  noCache: true, // 开发环境下不设置缓存
+  watch: true, // 开发环境下观察模板文件的变化并更新，方便开发
+  filter: { // 过滤器
+    json: str => {
+      return JSON.stringify(str, null, 2)
+    }
+  },
+  globals: { // 设置对于 nunjucks的全局变量
+    // staticPath: ''
+  }
+});
+
+// 静态文件配置，并挂在路由
+app.use(mount('/static', static(`${__dirname}/public`)));
+
+// 设置session
+mysql_session(app);
 
 // app.on('error', err => {
 //   debug('error事件触发，打印错误如下：');
