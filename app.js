@@ -2,13 +2,19 @@
 const Koa = require('koa'),
   router = require('koa-router')(), // koa-router 返回的是一个函数
   bodyparser = require('koa-bodyparser'),// 加载 Body 解析模块
-  logger = require('koa-logger'),
+  // logger = require('koa-logger'),
   debug = require('debug')('debug'),
   app_router = require('./router'),// 加载路由
   nunjucksViews = require('koa-nunjucks-promise'),  // 引擎模板
   static = require('koa-static'), // 静态文件
   mount = require('koa-mount'), // 挂载静态文件的中间件
   mysql_session = require('./common/mysql_session'); // session处理
+
+require('./logs/log4'); // 引入log4j日志配置， 生成相应目录和文件
+const log4 = require('koa-log4'), 
+  logger = log4.getLogger('app'); // 将当期文件日志命令为 app
+logger.info('------step into koa-------');
+
 // 创建一个Koa对象表示web app本身:
 const app = new Koa();
 
@@ -46,6 +52,9 @@ app.use(nunjucksViews(`${__dirname}/views`), {
 // 静态文件配置，并挂在路由
 app.use(mount('/static', static(`${__dirname}/public`)));
 
+// 记录http请求
+app.use(log4.koaLogger(log4.getLogger('http'), { level: 'auto' }))
+
 // 设置session
 mysql_session(app);
 
@@ -60,8 +69,8 @@ mysql_session(app);
 //   await next(); // 调用下一个middleware
 // });
 
-// 日志
-app.use(logger());
+// 日志 koa-logger
+// app.use(logger());
 // 解析body
 app.use(bodyparser());
 
@@ -72,4 +81,4 @@ app_router(router);
 
 // 在端口3000监听:
 app.listen(3000);
-debug('app started at port 3000...');
+// debug('app started at port 3000...');
