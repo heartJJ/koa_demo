@@ -9,4 +9,5 @@ const getWareHouseList = wrapHandle(async (ctx, next, conn) => {
 
 module.exports = router => {
   router.get('/wareHouse', getWareHouseList);
+
 }

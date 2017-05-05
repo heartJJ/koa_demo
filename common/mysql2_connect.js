@@ -1,7 +1,20 @@
 const mysql2 = require('mysql2');
 const mysql2_promise = require('mysql2/promise');
 
-// const pool = 
+/**
+ * 不使用promise
+ */
+// const pool = mysql2.createPool({
+//   connectionLimit : 10,
+//   host            : 'localhost',
+//   user            : 'root',
+//   password        : '123456',
+//   database        : 'fgrid_copy'
+// });
+
+/**
+ * 使用 promsie
+ */
 module.exports = mysql2_promise.createPool({
   connectionLimit : 10,
   host            : 'localhost',
@@ -50,7 +63,7 @@ module.exports = mysql2_promise.createPool({
 
 //         console.log(results);
 
-//         throw new Error(122312312);
+//         // throw new Error(122312312);
 //           connection.commit(function(err) {
 //             if (err) {
 //               return connection.rollback(function() {
@@ -64,6 +77,8 @@ module.exports = mysql2_promise.createPool({
 
 //   });
 // }
+
+// test()
 
 
 
